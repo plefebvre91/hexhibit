@@ -1,22 +1,16 @@
-use std::fs::File;
-use std::io::Read;
 
+use std::env;
 mod hx;
 
 fn main() {
-    let mut fp = File::open("../test.bin").unwrap();
-    let mut buf: [u8; hx::LINE_WIDTH] = [0; hx::LINE_WIDTH];
-    let mut counter: usize = 0;
 
-    println!("   Offset  ‖ Data");
+    // Get command line arguments
+    let args: Vec<String> = env::args().collect();
 
-    while fp.read(&mut buf).unwrap() > 0 {
-        //let byte = byte_or_error.unwrap();
-        let line = hx::Line {
-            offset: counter,
-            dump: buf,
-        };
-        counter += 1;
-        line.print();
+    // One argument is required
+    if args.len() != 2 {
+        println!("Usage: hexhibit <file>")
+    } else {
+        hx::dump(&args[1]);
     }
 }
